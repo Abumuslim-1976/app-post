@@ -4,18 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uz.pdp.apppost.entity.template.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Comment extends AbstractEntity {
 
     @Column(nullable = false, columnDefinition = "text")

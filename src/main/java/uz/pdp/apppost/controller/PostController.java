@@ -19,6 +19,13 @@ public class PostController {
     PostService postService;
 
 
+    @GetMapping
+    public HttpEntity<?> viewPost() {
+        ApiResponse apiResponse = postService.viewPost();
+        return ResponseEntity.ok(apiResponse);
+    }
+
+
     @PreAuthorize("hasAnyAuthority('ADD_POST')")
     @PostMapping
     public HttpEntity<?> createPost(@Valid @RequestBody PostDTO postDTO) {
@@ -41,8 +48,6 @@ public class PostController {
         ApiResponse apiResponse = postService.deletePost(id);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 404).body(apiResponse);
     }
-
-
 
 
 }

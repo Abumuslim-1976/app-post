@@ -29,7 +29,7 @@ public class CommentService {
 
 
     /*
-     *Commentlar tarixi.Buni hamma ko`ra oladi.
+     * Commentlar tarixi.Buni hamma ko`ra oladi.
      * */
     public ApiResponse viewComment() {
         List<Comment> commentList = commentRepository.findAll();
@@ -66,37 +66,16 @@ public class CommentService {
         if (!postOptional.isPresent())
             return new ApiResponse("Bunday ID lik post yo`q", false);
 
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!user.getId().equals(commentOptional.get().getCreatedBy()))
+            return new ApiResponse("Bu comment bu userniki emas , tahrirlab bo`lmaydi", false);
+
         Comment comment = commentOptional.get();
         comment.setText(commentDTO.getText());
-        comment.setPost(postOptional.get());
         commentRepository.save(comment);
         return new ApiResponse("Comment tahrirlandi", true);
     }
 
-
-    /*
-     * Foydalanuvchi o`z kommentini tahrirlashi
-     * */
-    public ApiResponse editMyComment(Long id, CommentDTO commentDTO) {
-        Optional<Comment> commentOptional = commentRepository.findById(id);
-        if (!commentOptional.isPresent())
-            return new ApiResponse("Bunday ID lik comment yo`q", false);
-
-        Optional<Post> postOptional = postRepository.findById(commentDTO.getPostId());
-        if (!postOptional.isPresent())
-            return new ApiResponse("Bunday ID lik post yo`q", false);
-
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user.getId().equals(commentOptional.get().getCreatedBy())) {
-            Comment comment = commentOptional.get();
-            comment.setText(commentDTO.getText());
-            comment.setPost(postOptional.get());
-            commentRepository.save(comment);
-            return new ApiResponse("Foydalanuvchi o`z commentini tahrirladi", true);
-        } else {
-            return new ApiResponse("Foydalanuvchi commentni tahrirlay olmaydi", false);
-        }
-    }
 
 
     /*

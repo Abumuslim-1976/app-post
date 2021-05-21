@@ -43,13 +43,6 @@ public class CommentController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
-    @PreAuthorize(value = "hasAnyAuthority('EDIT_MY_COMMENT')")
-    @PutMapping("/editMyComment/{id}")
-    public HttpEntity<?> editMyComment(@PathVariable Long id, @Valid @RequestBody CommentDTO commentDTO) {
-        ApiResponse apiResponse = commentService.editMyComment(id, commentDTO);
-        return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
-    }
-
 
     @PreAuthorize(value = "hasAnyAuthority('DELETE_COMMENT')")
     @DeleteMapping("/deleteComment/{id}")
